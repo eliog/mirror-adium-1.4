@@ -21,7 +21,7 @@ JSONGLIB=libjson-glib-1.0.0
 # vv
 # I'm not sure what to do to universalize the vv libs, especially the gst-plugins
 
-PURPLE_VERSION=0.6.0
+PURPLE_VERSION=0.6.2
 
 LIBPURPLE=libpurple.$PURPLE_VERSION
 PURPLE_FOLDER=libpurple-$PURPLE_VERSION
@@ -56,7 +56,7 @@ mkdir libgthread-2.0.0 || true
 touch libgthread-2.0.0/no_headers_here.txt
 
 mkdir libjson-glib-1.0.0 || true
-cp -R $TARGET_DIR_I386/include/json-glib-1.0/ $UNIVERSAL_DIR/include/libjson-glib-1.0.0/
+cp -R $TARGET_DIR_I386/include/json-glib-1.0/json-glib $UNIVERSAL_DIR/include/libjson-glib-1.0.0
 
 rm -rf $UNIVERSAL_DIR/include/$PURPLE_FOLDER
 cp -R $TARGET_DIR_I386/include/libpurple $UNIVERSAL_DIR/include/$PURPLE_FOLDER
