@@ -1272,9 +1272,25 @@
 - (void)performDefaultActionOnSelectedObject:(AIListObject *)listObject sender:(NSOutlineView *)sender
 {
 	if ([listObject isKindOfClass:[AIListContact class]]) {
+		// We should default to this contact's account
 		[adium.interfaceController setActiveChat:[adium.chatController openChatWithContact:(AIListContact *)listObject
-												  onPreferredAccount:YES]];
+												  onPreferredAccount:NO]];
 	}
+}
+
+/*!
+ * @brief Capture all text input
+ *
+ * Capture all text input in our user list and forward it to the text entry view.
+ * This prevents the user list from becoming a black hole if it's clicked on.
+ */
+- (BOOL)forwardKeyEventToFindPanel:(NSEvent *)theEvent
+{
+	[self makeTextEntryViewFirstResponder];
+	
+	[self.textEntryView keyDown:theEvent];
+	
+	return YES;
 }
 
 /* 

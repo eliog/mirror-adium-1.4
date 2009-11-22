@@ -838,13 +838,8 @@
     
     NSString *path = @"account/update_location.xml";
     
-    NSString *trimmedText = location;
-    if ([trimmedText length] > MAX_LOCATION_LENGTH) {
-        trimmedText = [trimmedText substringToIndex:MAX_LOCATION_LENGTH];
-    }
-    
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:0];
-    [params setObject:trimmedText forKey:@"location"];
+    [params setObject:location forKey:@"location"];
     NSString *body = [self _queryStringWithBase:nil parameters:params prefixed:NO];
     
     return [self _sendRequestWithMethod:HTTP_POST_METHOD path:path 
@@ -934,7 +929,7 @@
 
 - (NSString *)getFollowedTimelineFor:(NSString *)username since:(NSDate *)date startingAtPage:(int)pageNum count:(int)count
 {
-	NSString *path = @"statuses/friends_timeline.xml";
+	NSString *path = @"statuses/home_timeline.xml";
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:0];
     if (date) {
@@ -944,7 +939,7 @@
         [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"page"];
     }
     if (username) {
-        path = [NSString stringWithFormat:@"statuses/friends_timeline/%@.xml", username];
+        path = [NSString stringWithFormat:@"statuses/home_timeline/%@.xml", username];
     }
 	int tweetCount = DEFAULT_TWEET_COUNT;
 	if (count > 0) {
@@ -960,7 +955,7 @@
 
 - (NSString *)getFollowedTimelineFor:(NSString *)username sinceID:(NSString *)updateID startingAtPage:(int)pageNum count:(int)count
 {
-	NSString *path = @"statuses/friends_timeline.xml";
+	NSString *path = @"statuses/home_timeline.xml";
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:0];
     if (updateID > 0) {
@@ -970,14 +965,14 @@
         [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"page"];
     }
     if (username) {
-        path = [NSString stringWithFormat:@"statuses/friends_timeline/%@.xml", username];
+        path = [NSString stringWithFormat:@"statuses/home_timeline/%@.xml", username];
     }
 	int tweetCount = DEFAULT_TWEET_COUNT;
 	if (count > 0) {
 		tweetCount = count;
 	}
 	[params setObject:[NSString stringWithFormat:@"%d", tweetCount] forKey:@"count"];
-    
+	
     return [self _sendRequestWithMethod:nil path:path queryParameters:params body:nil 
                             requestType:MGTwitterStatusesRequest 
                            responseType:MGTwitterStatuses];
@@ -1278,13 +1273,8 @@
     
     NSString *path = @"statuses/update.xml";
     
-    NSString *trimmedText = status;
-    if ([trimmedText length] > MAX_MESSAGE_LENGTH) {
-        trimmedText = [trimmedText substringToIndex:MAX_MESSAGE_LENGTH];
-    }
-    
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:0];
-    [params setObject:trimmedText forKey:@"status"];
+    [params setObject:status forKey:@"status"];
     if (updateID > 0) {
         [params setObject:updateID forKey:@"in_reply_to_status_id"];
     }
@@ -1318,6 +1308,14 @@
                            responseType:MGTwitterStatus];
 }
 
+- (NSString *)retweetUpdate:(NSString *)updateID
+{
+    NSString *path = [NSString stringWithFormat:@"statuses/retweet/%@.xml", updateID];
+    
+    return [self _sendRequestWithMethod:HTTP_POST_METHOD path:path queryParameters:nil body:nil 
+                            requestType:MGTwitterAccountRequest 
+                           responseType:MGTwitterStatus];	
+}
 
 #pragma mark Sending and editing direct messages
 
@@ -1330,13 +1328,8 @@
     
     NSString *path = @"direct_messages/new.xml";
     
-    NSString *trimmedText = message;
-    if ([trimmedText length] > MAX_MESSAGE_LENGTH) {
-        trimmedText = [trimmedText substringToIndex:MAX_MESSAGE_LENGTH];
-    }
-    
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:0];
-    [params setObject:trimmedText forKey:@"text"];
+    [params setObject:message forKey:@"text"];
     [params setObject:username forKey:@"user"];
     NSString *body = [self _queryStringWithBase:nil parameters:params prefixed:NO];
     

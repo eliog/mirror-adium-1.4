@@ -680,18 +680,18 @@ static NSArray *draggedTypes = nil;
 		if (content.trackContent && [content.displayClasses containsObject:@"mention"]) {
 			[self markCurrentLocation];
 		}
-
-		if (adium.interfaceController.activeChat != content.chat && [content.type isEqualToString:CONTENT_MESSAGE_TYPE]) {
+		
+		if (content.postProcessContent && adium.interfaceController.activeChat != content.chat) {
 			if (nextMessageFocus) {
 				[self.markedScroller addMarkAt:[self.currentOffsetHeight integerValue] withIdentifier:@"focus" withColor:[NSColor redColor]];
 				
-				// Add a class for "first message to lose focus"
+				// Add a class for "first content to lose focus"
 				[content addDisplayClass:@"firstFocus"];
 				
 				nextMessageFocus = NO;
 			}
 
-			// Add a class for "this message received while out of focus"
+			// Add a class for "this content received while out of focus"
 			[content addDisplayClass:@"focus"];
 		}
 		
