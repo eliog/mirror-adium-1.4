@@ -277,7 +277,7 @@
 				
 				//Continue to parse as long as we need more elements, we have data to read, and LMX doesn't think we're done.
 			} while ([foundMessages count] < linesLeftToFind && offset > 0 && result != LMXParsedCompletely);
-
+			
 		} @catch (id theException) {
 			AILogWithSignature(@"Error \"%@\" while parsing %@; foundMessages at that point was %@, and the chunk to be parsed was %@",
 							   theException, logPath, 
@@ -285,10 +285,10 @@
 		} @finally {
 			//Drain our autorelease pool.
 			[parsingAutoreleasePool release];
-
+			
 			//Be a good citizen and close the file
 			[file closeFile];
-
+			
 			//Add our locals to the outer array; we're probably looping again.
 			[outerFoundContentContexts replaceObjectsInRange:NSMakeRange(0, 0) withObjectsFromArray:foundMessages];
 			linesLeftToFind -= [outerFoundContentContexts count];
@@ -298,7 +298,7 @@
 	if (linesLeftToFind > 0) {
 		AILogWithSignature(@"Unable to find %d logs for %@", linesLeftToFind, chat);
 	}
-	
+
 	return outerFoundContentContexts;
 }
 
