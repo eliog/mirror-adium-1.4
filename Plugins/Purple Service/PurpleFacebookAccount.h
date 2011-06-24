@@ -7,8 +7,9 @@
 //
 
 #import "CBPurpleAccount.h"
+#import "AIFacebookXMPPAccount.h"
 
-@interface PurpleFacebookAccount : CBPurpleAccount {
+@interface PurpleFacebookAccount : AIFacebookXMPPAccount {
 
 }
 

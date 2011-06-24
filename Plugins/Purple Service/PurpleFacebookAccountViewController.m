@@ -7,12 +7,8 @@
 //
 
 #import "PurpleFacebookAccountViewController.h"
+#import "PurpleFacebookAccount.h"
 
 @implementation PurpleFacebookAccountViewController
-
-- (NSString *)nibName
-{
-	return @"PurpleFacebookAccountView";
-}
 
 @end

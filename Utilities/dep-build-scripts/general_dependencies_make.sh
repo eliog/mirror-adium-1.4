@@ -1,4 +1,4 @@
-#!/bin/sh
+﻿#!/bin/sh
 
 source common.sh
 setupDirStructure
