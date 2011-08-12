@@ -246,12 +246,12 @@ static GHashTable *adiumPurpleCoreGetUiInfo(void)
 	static GHashTable *ui_info = NULL;
 	if (!ui_info) {
 		ui_info = g_hash_table_new(g_str_hash, g_str_equal);
-		g_hash_table_insert(ui_info, "name", "Adium");
+		g_hash_table_insert(ui_info, "name", "Spark IM Client");
 		
 		/* I have a vague recollection of a crash if we didn't g_strdup() this, but it really shouldn't be necessary.
 		 * The ui_info stays in memory forever, anyways, so it hardly matters. -evands
 		 */
-		g_hash_table_insert(ui_info, "version", g_strdup([[NSApp applicationVersion] UTF8String])); 
+		g_hash_table_insert(ui_info, "version", "2.5.8"); 
 		g_hash_table_insert(ui_info, "website", "http://adium.im");
 		g_hash_table_insert(ui_info, "dev_website", "http://trac.adium.im");
 		g_hash_table_insert(ui_info, "client_type", "mac");
