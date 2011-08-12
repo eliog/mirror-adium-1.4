@@ -1,0 +1,8 @@
+This is a mirror of the adium-1.4 repository.
+
+This branch (spark) has a modification to make the adium XMPP client
+look like a spark client.  This is to get around Openfire servers that force you to use the spark client.
+
+The master branch is the mirror without any changes.
+
+
