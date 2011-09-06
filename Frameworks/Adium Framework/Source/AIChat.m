@@ -282,7 +282,7 @@ static int nextChatNumber = 0;
 - (void)setDisplayName:(NSString *)inDisplayName
 {
 	[[self displayArrayForKey:@"Display Name"] setObject:inDisplayName
-											   withOwner:self
+											   withOwner:[NSValue valueWithNonretainedObject:self] /* Don't want a retain loop */
 										   priorityLevel:Highest_Priority];
 
 	//The display array doesn't cause an attribute update; fake it.
@@ -411,7 +411,7 @@ NSComparisonResult userListSort (id objectA, id objectB, void *context)
 
 - (void)addParticipatingListObjects:(NSArray *)inObjects notify:(BOOL)notify
 {
-	NSMutableArray *contacts = [[inObjects mutableCopy] autorelease];
+	NSMutableArray *contacts = [inObjects mutableCopy];
 
 	for (AIListObject *obj in inObjects) {
 		if ([self containsObject:obj] || ![self canContainObject:obj])
@@ -420,6 +420,7 @@ NSComparisonResult userListSort (id objectA, id objectB, void *context)
 	
 	[participatingContacts addObjectsFromArray:contacts];
 	[adium.chatController chat:self addedListContacts:contacts notify:notify];
+	[contacts release];
 }
 
 // Invite a list object to join the chat. Returns YES if the chat joins, NO otherwise
@@ -615,14 +616,13 @@ NSComparisonResult userListSort (id objectA, id objectB, void *context)
 }
 
 #pragma mark AIContainingObject protocol
-//AIContainingObject protocol
 - (NSArray *)visibleContainedObjects
 {
 	return self.containedObjects;
 }
 - (NSArray *)containedObjects
 {
-	return [[participatingContacts copy] autorelease];
+	return participatingContacts;
 }
 - (NSUInteger)countOfContainedObjects
 {
@@ -696,10 +696,11 @@ NSComparisonResult userListSort (id objectA, id objectB, void *context)
 
 - (void)removeAllParticipatingContactsSilently
 {
+	/* Note that allGroupChatsContainingContact won't count this chat if it's already marked as not open */
 	for (AIListContact *listContact in self) {
 		if (listContact.isStranger &&
 			![adium.chatController existingChatWithContact:listContact.parentContact] &&
-			![adium.chatController allGroupChatsContainingContact:listContact.parentContact].count) {
+			([adium.chatController allGroupChatsContainingContact:listContact.parentContact].count == 0)) {
 			[adium.contactController accountDidStopTrackingContact:listContact];
 		}
 	}

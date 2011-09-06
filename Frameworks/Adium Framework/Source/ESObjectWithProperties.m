@@ -45,7 +45,7 @@
 	return self;
 }
 
-- (void)clearProxyObjects
+- (void)_clearProxyObjects
 {
 	for (AIProxyListObject *proxy in proxyObjects)
 		[AIProxyListObject releaseProxyObject:proxy];
@@ -57,7 +57,7 @@
  */
 - (void)dealloc
 {
-	[self clearProxyObjects];
+	[self _clearProxyObjects];
 
 	[propertiesDictionary release]; propertiesDictionary = nil;
 	[changedProperties release]; changedProperties = nil;
@@ -326,17 +326,6 @@
 {
 	if (!proxyObjects) proxyObjects = [[NSMutableSet alloc] init];
 	[proxyObjects addObject:proxyObject];
-}
-
-/*!
- * @brief Notify that a proxy object has been removed for this object
- */
-- (void)removeProxyObject:(id)proxyObject
-{
-	if (proxyObject) {
-		[AIProxyListObject releaseProxyObject:proxyObject];
-		[proxyObjects removeObject:proxyObject];
-	}
 }
 
 @end

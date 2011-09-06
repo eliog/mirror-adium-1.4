@@ -6,12 +6,12 @@
 //  Copyright 2009 Adium X / Saltatory Software. All rights reserved.
 //
 
-@class ESObjectWithProperties;
+@class ESObjectWithProperties, MAZeroingWeakRef;
 @protocol AIContainingObject;
 
 @interface AIProxyListObject : NSObject {
-	id listObject;
-	id <AIContainingObject> containingObject;
+	AIListObject *listObject;
+    ESObjectWithProperties <AIContainingObject> *containingObject;
 	NSString *key;
 	NSString *cachedDisplayNameString;
 	NSAttributedString *cachedDisplayName;
@@ -23,17 +23,10 @@
 @property (nonatomic, retain) NSAttributedString *cachedDisplayName;
 @property (nonatomic) NSSize cachedDisplayNameSize;
 
-/*! 
- * @brief Return the listObject represented by this AIProxyListObject
- *
- * This is a retain loop, as listObject also retains its AIProxyListObjects.
- * It is therefore imperative that, when an AIListObject is no longer tracked by an account,
- * +[AIProxyListObject releaseProxyObject:] is called. This must not wait until -[AIListContact dealloc] or it would
- * never be called.
- */
-@property (nonatomic, retain) id listObject; 
-@property (nonatomic, assign) id <AIContainingObject> containingObject;
 @property (nonatomic, retain) NSString *key;
+
+@property (nonatomic, assign) AIListObject *listObject;
+@property (nonatomic, assign) ESObjectWithProperties <AIContainingObject> * containingObject;
 
 + (AIProxyListObject *)proxyListObjectForListObject:(ESObjectWithProperties *)inListObject
 									   inListObject:(ESObjectWithProperties<AIContainingObject> *)containingObject;
@@ -42,10 +35,13 @@
 											   inListObject:(ESObjectWithProperties <AIContainingObject>*)inContainingObject;
 
 /*!
- * @biref Called by ESObjectWithProperties to release its proxy object.
- *
- * This method resolves the retain count noted in documentation for -[AIPorxyListObject listObject]; it must be called.
+ * @brief Called when an AIListObject is done with an AIProxyListObject to remove it from the global dictionary
  */
 + (void)releaseProxyObject:(AIProxyListObject *)proxyObject;
+
+/*!
+ * @brief Clear out cached display information; should be called when the AIProxyListObject may be used later
+ */
+- (void)flushCache;
 
 @end
